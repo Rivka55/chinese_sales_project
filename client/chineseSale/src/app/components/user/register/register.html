@@ -1,0 +1,268 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <circle cx="28" cy="28" r="28" fill="url(#headerGrad)" />
+          <path d="M28 16c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 20c-5.3 0-16 2.7-16 8v2h32v-2c0-5.3-10.7-8-16-8z" fill="#fff"/>
+          <defs>
+            <linearGradient id="headerGrad" x1="0" y1="0" x2="56" y2="56">
+              <stop offset="0%" stop-color="#ff6b6b"/>
+              <stop offset="50%" stop-color="#ffa502"/>
+              <stop offset="100%" stop-color="#ffd93d"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2>הרשמה למכירה הסינית</h2>
+      <p class="auth-subtitle">צור חשבון חדש והצטרף למכירה</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
+      <!-- Name Field -->
+      <div class="form-group" [class.has-error]="f['name'].touched && f['name'].invalid" [class.has-success]="f['name'].touched && f['name'].valid">
+        <label for="name">
+          <i class="field-icon">👤</i>
+          שם מלא
+        </label>
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            placeholder="הכנס שם מלא"
+            autocomplete="name"
+          />
+          @if (f['name'].touched && f['name'].valid && !f['name'].pending) {
+            <span class="status-icon valid">✓</span>
+          }
+          @if (f['name'].touched && f['name'].invalid) {
+            <span class="status-icon invalid">✗</span>
+          }
+          @if (f['name'].pending) {
+            <span class="status-icon checking">⏳</span>
+          }
+        </div>
+        @if (f['name'].touched && f['name'].errors) {
+          <div class="error-messages">
+            @if (f['name'].errors['required']) {
+              <small>⚠ שם הוא שדה חובה</small>
+            }
+            @if (f['name'].errors['minlength']) {
+              <small>⚠ שם חייב להכיל לפחות 2 תווים</small>
+            }
+            @if (f['name'].errors['maxlength']) {
+              <small>⚠ שם לא יכול להכיל יותר מ-50 תווים</small>
+            }
+            @if (f['name'].errors['nameExists']) {
+              <small>⚠ שם המשתמש כבר קיים במערכת</small>
+            }
+          </div>
+        }
+        @if (f['name'].pending) {
+          <div class="checking-hint">⏳ בודק זמינות שם משתמש...</div>
+        }
+        @if (f['name'].touched && f['name'].valid && !f['name'].pending) {
+          <div class="success-hint">✓ שם תקין</div>
+        }
+      </div>
+
+      <!-- Phone Field -->
+      <div class="form-group" [class.has-error]="f['phone'].touched && f['phone'].invalid" [class.has-success]="f['phone'].touched && f['phone'].valid">
+        <label for="phone">
+          <i class="field-icon">📱</i>
+          טלפון
+        </label>
+        <div class="input-wrapper">
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            placeholder="050-1234567"
+            autocomplete="tel"
+            dir="ltr"
+          />
+          @if (f['phone'].touched && f['phone'].valid) {
+            <span class="status-icon valid">✓</span>
+          }
+          @if (f['phone'].touched && f['phone'].invalid) {
+            <span class="status-icon invalid">✗</span>
+          }
+        </div>
+        @if (f['phone'].touched && f['phone'].errors) {
+          <div class="error-messages">
+            @if (f['phone'].errors['required']) {
+              <small>⚠ טלפון הוא שדה חובה</small>
+            }
+            @if (f['phone'].errors['phonePrefix']) {
+              <small>⚠ מספר טלפון חייב להתחיל ב-0 (ישראלי) או + (בינלאומי)</small>
+            }
+            @if (f['phone'].errors['phoneChars']) {
+              <small>⚠ מספר טלפון יכול להכיל רק ספרות, מקפים ורווחים</small>
+            }
+            @if (f['phone'].errors['phoneLength']) {
+              <small>⚠ מספר טלפון ישראלי חייב להכיל 9-10 ספרות, בינלאומי 7-15 ספרות</small>
+            }
+            @if (f['phone'].errors['phoneMobile']) {
+              <small>⚠ מספר נייד ישראלי חייב להתחיל ב-05</small>
+            }
+          </div>
+        }
+        @if (f['phone'].touched && f['phone'].valid) {
+          <div class="success-hint">✓ מספר טלפון תקין</div>
+        }
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group" [class.has-error]="f['email'].touched && f['email'].invalid" [class.has-success]="f['email'].touched && f['email'].valid">
+        <label for="email">
+          <i class="field-icon">📧</i>
+          אימייל
+        </label>
+        <div class="input-wrapper">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="example@email.com"
+            autocomplete="email"
+            dir="ltr"
+          />
+          @if (f['email'].touched && f['email'].valid && !f['email'].pending) {
+            <span class="status-icon valid">✓</span>
+          }
+          @if (f['email'].touched && f['email'].invalid) {
+            <span class="status-icon invalid">✗</span>
+          }
+          @if (f['email'].pending) {
+            <span class="status-icon checking">⏳</span>
+          }
+        </div>
+        @if (f['email'].touched && f['email'].errors) {
+          <div class="error-messages">
+            @if (f['email'].errors['required']) {
+              <small>⚠ אימייל הוא שדה חובה</small>
+            }
+            @if (f['email'].errors['emailNoAt']) {
+              <small>⚠ כתובת אימייל חייבת להכיל סימן @</small>
+            }
+            @if (f['email'].errors['emailMultiAt']) {
+              <small>⚠ כתובת אימייל יכולה להכיל סימן @ אחד בלבד</small>
+            }
+            @if (f['email'].errors['emailNoLocal']) {
+              <small>⚠ חסר שם משתמש לפני ה-@</small>
+            }
+            @if (f['email'].errors['emailNoDomain']) {
+              <small>⚠ חסר דומיין (לדוגמה: gmail.com)</small>
+            }
+            @if (f['email'].errors['emailBadDomain']) {
+              <small>⚠ דומיין לא תקין - לא יכול להתחיל או להסתיים בנקודה</small>
+            }
+            @if (f['email'].errors['emailInvalid']) {
+              <small>⚠ כתובת אימייל לא תקינה (לדוגמה: name&#64;domain.com)</small>
+            }
+            @if (f['email'].errors['emailExists']) {
+              <small>⚠ כתובת האימייל כבר רשומה במערכת</small>
+            }
+          </div>
+        }
+        @if (f['email'].pending) {
+          <div class="checking-hint">⏳ בודק זמינות אימייל...</div>
+        }
+        @if (f['email'].touched && f['email'].valid && !f['email'].pending) {
+          <div class="success-hint">✓ אימייל תקין</div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group" [class.has-error]="f['password'].touched && f['password'].invalid" [class.has-success]="f['password'].touched && f['password'].valid">
+        <label for="password">
+          <i class="field-icon">🔒</i>
+          סיסמה
+        </label>
+        <div class="input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="לפחות 6 תווים"
+            autocomplete="new-password"
+            dir="ltr"
+          />
+          <button type="button" class="toggle-password" (click)="togglePassword()" tabindex="-1">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        @if (f['password'].touched && f['password'].errors) {
+          <div class="error-messages">
+            @if (f['password'].errors['required']) {
+              <small>⚠ סיסמה היא שדה חובה</small>
+            }
+            @if (f['password'].errors['minlength']) {
+              <small>⚠ סיסמה חייבת להיות לפחות 6 תווים ({{ f['password'].value.length }}/6)</small>
+            }
+            @if (f['password'].errors['maxlength']) {
+              <small>⚠ סיסמה לא יכולה להכיל יותר מ-100 תווים</small>
+            }
+          </div>
+        }
+        <!-- Password Strength Indicator -->
+        @if (f['password'].value) {
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div
+                class="strength-fill"
+                [style.width]="getPasswordStrengthPercent()"
+                [ngClass]="getPasswordStrengthClass()"
+              ></div>
+            </div>
+            <small class="strength-label" [ngClass]="getPasswordStrengthClass()">
+              {{ getPasswordStrengthText() }}
+            </small>
+          </div>
+          <div class="password-tips">
+            <small [class.met]="f['password'].value.length >= 6">• לפחות 6 תווים</small>
+            <small [class.met]="f['password'].value.length >= 10">• 10+ תווים לחוזק נוסף</small>
+            <small [class.met]="getPasswordStrength() >= 3">• אות גדולה באנגלית</small>
+            <small [class.met]="getPasswordStrength() >= 4">• ספרה או תו מיוחד</small>
+          </div>
+        }
+      </div>
+
+      <!-- Error / Success Messages -->
+      @if (errorMsg) {
+        <div class="alert alert-error">
+          <span class="alert-icon">⚠️</span>
+          <span>{{ errorMsg }}</span>
+        </div>
+      }
+      @if (successMsg) {
+        <div class="alert alert-success">
+          <span class="alert-icon">🎉</span>
+          <span>{{ successMsg }}</span>
+        </div>
+      }
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="isSubmitting"
+        [class.loading]="isSubmitting"
+      >
+        @if (isSubmitting) {
+          <span class="spinner"></span>
+          נרשם...
+        } @else {
+          <span>צור חשבון</span>
+          <span class="btn-arrow">←</span>
+        }
+      </button>
+
+      <div class="auth-footer">
+        <span>כבר יש לך חשבון?</span>
+        <a routerLink="/login">היכנס כאן</a>
+      </div>
+    </form>
+  </div>
+</div>

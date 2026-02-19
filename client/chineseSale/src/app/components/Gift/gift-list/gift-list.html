@@ -1,0 +1,177 @@
+<div class="page-header">
+  <h2 class="page-title">בואו לבחור את הפרסים שלכם</h2>
+  <p class="page-subtitle">בחרו מתנות ורכשו כרטיסים להגרלה</p>
+</div>
+
+<!-- ===== MANAGER SEARCH ===== -->
+@if (authService.isManager()) {
+<div class="search-panel manager-search">
+  <h4>🔍 חיפוש מתקדם (מנהל)</h4>
+  <div class="search-fields">
+    <input type="text" [(ngModel)]="mgrFilterName" placeholder="שם מתנה..." class="search-input" />
+    <input type="text" [(ngModel)]="mgrFilterDonor" placeholder="שם תורם..." class="search-input" />
+    <input type="number" [(ngModel)]="mgrFilterBuyers" placeholder="מינימום קונים..." class="search-input" />
+    <button class="btn-search" (click)="managerSearch()">חפש</button>
+    <button class="btn-clear" (click)="clearManagerSearch()">נקה</button>
+  </div>
+</div>
+}
+
+<!-- ===== USER SEARCH: Category Pills ===== -->
+@if (!authService.isManager()) {
+<div class="category-bar">
+  <a routerLink="/gifts" class="cat-pill" [class.active]="filterCategory === ''" (click)="filterByCategory('')">
+    🎁 כל הפרסים
+  </a>
+  @for (cat of categories; track cat.id) {
+    <button class="cat-pill" [class.active]="filterCategory === cat.name" (click)="filterByCategory(cat.name)">
+      {{ cat.name }}
+    </button>
+  }
+</div>
+}
+
+<!-- ===== MANAGER ADD BUTTON ===== -->
+@if (authService.isManager()) {
+  <button class="btn-add" (click)="addGift()">➕ הוספת מתנה חדשה</button>
+}
+
+<!-- ===== MANAGER VIEW: Card Rows ===== -->
+@if (authService.isManager()) {
+<div class="mgr-cards-container">
+  <!-- "All gifts" navigation pill -->
+  <div class="category-bar mgr-category-bar">
+    <a routerLink="/gifts" class="cat-pill active">🎁 כל הפרסים</a>
+  </div>
+
+  @for(g of (filteredGifts ?? (gifts$ | async)); track g.id) {
+    <div class="mgr-card-row" [class.won]="g.winnerName != 'N/A'">
+      <!-- Image section with winner overlay -->
+      <a [routerLink]="['/gifts', g.id]" class="mgr-card-image-wrapper">
+        @if (g.picture) {
+          <img [src]="'images/' + g.picture" [alt]="g.name" class="mgr-card-image" />
+        } @else {
+          <div class="mgr-card-no-image">🎁</div>
+        }
+        <!-- Winner overlay (similar to user view) -->
+        @if (g.winnerName != 'N/A') {
+          <div class="winner-overlay">
+            <div class="winner-overlay-content">
+              <span class="winner-icon">🏆</span>
+              <span class="winner-label">זוכה</span>
+              <span class="winner-name">{{ g.winnerName }}</span>
+              @if (g.winnerEmail) {
+                <span class="winner-email">{{ g.winnerEmail }}</span>
+              }
+            </div>
+          </div>
+        }
+      </a>
+
+      <!-- Card body: gift info -->
+      <div class="mgr-card-body">
+        <a [routerLink]="['/gifts', g.id]" class="card-title-link">
+          <h3 class="card-title">{{ g.name }}</h3>
+        </a>
+        <div class="mgr-card-info">
+          <span class="mgr-info-item">📝 {{ g.description }}</span>
+          <span class="mgr-info-item">💰 {{ g.price }} ₪</span>
+          <span class="mgr-info-item">🤝 {{ g.donorName }}</span>
+          <span class="mgr-info-item">📂 {{ g.categoryName }}</span>
+        </div>
+      </div>
+
+      <!-- Winner announcement banner (shows immediately after draw) -->
+      @if (drawnWinners[g.id]) {
+        <div class="winner-banner">
+          <h4>🎉 הזוכה בהגרלה 🎉</h4>
+          <p><strong>שם:</strong> {{ drawnWinners[g.id].name }}</p>
+          <p><strong>אימייל:</strong> {{ drawnWinners[g.id].email }}</p>
+          <p class="email-notice">📧 מייל נשלח לזוכה</p>
+        </div>
+      }
+
+      <!-- Actions -->
+      <div class="mgr-card-actions">
+        @if (g.winnerName == 'N/A' && !drawnWinners[g.id]) {
+          <button class="btn-edit" (click)="openEdit(g.id)">✏️ עריכה</button>
+          <button class="btn-draw" (click)="drawWinner(g.id, $event)">🎰 הגרלה</button>
+          <button class="btn-add-cart" (click)="addToCart(g); $event.stopPropagation()">🛒 הוסף לסל</button>
+        }
+        @if (cartMessages[g.id]) {
+          <span class="cart-msg">{{ cartMessages[g.id] }}</span>
+        }
+      </div>
+    </div>
+  }
+</div>
+}
+
+<!-- ===== USER VIEW: Cards (Ezer Mitzion style) ===== -->
+@if (!authService.isManager()) {
+<div class="gifts-grid">
+  @for(g of (filteredGifts ?? (gifts$ | async)); track g.id) {
+    <div class="gift-card" [class.won]="g.winnerName != 'N/A'">
+      <!-- Card Image (clickable -> product page) -->
+      <a [routerLink]="['/gifts', g.id]" class="card-image-wrapper">
+        @if (g.picture) {
+          <img [src]="'images/' + g.picture" [alt]="g.name" class="card-image" />
+        } @else {
+          <div class="card-no-image">🎁</div>
+        }
+        <!-- Winner overlay -->
+        @if (g.winnerName != 'N/A') {
+          <div class="winner-overlay">
+            <div class="winner-overlay-content">
+              <span class="winner-icon">🏆</span>
+              <span class="winner-label">זוכה</span>
+              <span class="winner-name">{{ g.winnerName }}</span>
+            </div>
+          </div>
+        }
+      </a>
+
+      <!-- Gift Title (clickable -> product page) -->
+      <div class="card-body">
+        <a [routerLink]="['/gifts', g.id]" class="card-title-link">
+          <h3 class="card-title">{{ g.name }}</h3>
+        </a>
+      </div>
+
+      <!-- Quantity Controls: + [number] − (different background) -->
+      <div class="card-controls">
+        @if (g.winnerName == 'N/A') {
+          @if (authService.isLoggedIn()) {
+            <div class="qty-row">
+              <button class="qty-btn qty-plus" (click)="incrementQty(g)" [disabled]="loading[g.id]">+</button>
+              <input
+                type="number"
+                class="qty-input"
+                [value]="getQuantity(g.id)"
+                (change)="onQtyChange(g, $event)"
+                min="0"
+                max="100"
+              />
+              <button class="qty-btn qty-minus" (click)="decrementQty(g)" [disabled]="loading[g.id] || getQuantity(g.id) <= 0">−</button>
+            </div>
+          } @else {
+            <button class="btn-login-to-buy" (click)="goToLogin()">🔑 התחבר כדי לקנות</button>
+          }
+        }
+        @if (cartMessages[g.id]) {
+          <div class="cart-msg">{{ cartMessages[g.id] }}</div>
+        }
+      </div>
+    </div>
+  }
+</div>
+}
+
+<!-- ===== MANAGER EDIT FORM (MODAL) ===== -->
+@if (authService.isManager() && showForm) {
+<div class="modal-overlay" (click)="closeForm()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-gift-edit [id]="selectedId" (idChange)="onIdChange($event)"></app-gift-edit>
+  </div>
+</div>
+}

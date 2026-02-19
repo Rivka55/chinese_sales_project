@@ -1,0 +1,24 @@
+@if (donor) {
+<div class="donor-details-card">
+  <div class="detail-header">
+    <h4>👤 פרטי תורם: {{donor.name}}</h4>
+  </div>
+  <div class="detail-info">
+    <p>🆔 ת.ז.: <strong>{{donor.identityNumber}}</strong></p>
+    <p>📧 אימייל: <strong>{{donor.email}}</strong></p>
+    <p>📱 טלפון: <strong>{{donor.phone}}</strong></p>
+  </div>
+  @if (donor.gifts && donor.gifts.length > 0) {
+  <div class="gifts-section">
+    <h5>🎁 מתנות שתרם:</h5>
+    <div class="gift-tags">
+      @for (gift of donor.gifts; track gift.id) {
+        <span class="gift-tag">{{gift.name}}</span>
+      }
+    </div>
+  </div>
+  } @else {
+    <p class="no-gifts">אין מתנות משויכות</p>
+  }
+</div>
+}

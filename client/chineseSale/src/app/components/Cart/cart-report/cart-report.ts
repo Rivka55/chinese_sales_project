@@ -1,0 +1,23 @@
+import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { CartService } from '../../../services/Cart/cart-service';
+import { PurchaserDetailsModel } from '../../../models/Cart/PurchaserDetailsModel';
+
+@Component({
+  selector: 'app-cart-report',
+  imports: [DatePipe],
+  templateUrl: './cart-report.html',
+  styleUrls: ['./cart-report.scss'],
+})
+export class CartReport {
+    reports: PurchaserDetailsModel[] = [];
+
+  constructor(private cartService: CartService) { }
+
+  ngOnInit(): void {
+    this.cartService.getAllPurchasers().subscribe({
+      next: (res: PurchaserDetailsModel[]) => this.reports = res,
+      error: (err: any) => console.error('שגיאה בטעינת הדוח', err)
+    });
+  }
+}

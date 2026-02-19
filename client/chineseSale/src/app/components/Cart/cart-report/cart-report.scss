@@ -1,0 +1,46 @@
+.report-page {
+  direction: rtl;
+}
+
+.page-header {
+  margin-bottom: 24px;
+  h2 { font-size: 1.6rem; color: #333; margin: 0; }
+}
+
+.empty-state {
+  text-align: center; padding: 40px;
+  background: white; border-radius: 14px;
+  color: #999; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.purchaser-card {
+  background: white; border-radius: 14px;
+  margin-bottom: 20px; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.purchaser-header {
+  background: linear-gradient(135deg, #f8f9ff, #eef1ff);
+  padding: 18px 22px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+  h3 { margin: 0; font-size: 1.1rem; color: #333; }
+  p { margin: 4px 0 0; font-size: 0.85rem; color: #777; }
+}
+
+.purchaser-stats {
+  display: flex; gap: 20px;
+}
+
+.stat {
+  text-align: center;
+  .stat-value { display: block; font-size: 1.2rem; font-weight: 700; color: #667eea; }
+  .stat-label { font-size: 0.75rem; color: #999; }
+}
+
+.history-table {
+  width: 100%; border-collapse: collapse; text-align: center;
+  th { padding: 10px 14px; background: #f8f9fa; color: #555; font-weight: 600; font-size: 0.85rem; }
+  td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; }
+  .price-cell { font-weight: 600; color: #667eea; }
+}

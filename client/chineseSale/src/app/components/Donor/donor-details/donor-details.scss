@@ -1,0 +1,40 @@
+.donor-details-card {
+  direction: rtl;
+  padding: 16px 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.detail-header h4 {
+  margin: 0 0 10px; font-size: 1.05rem;
+  color: #333;
+}
+
+.detail-info p {
+  margin: 4px 0; font-size: 0.9rem; color: #555;
+  strong { color: #333; }
+}
+
+.gifts-section {
+  margin-top: 12px;
+  h5 { margin: 0 0 8px; font-size: 0.95rem; color: #444; }
+}
+
+.gift-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+
+.gift-tag {
+  background: linear-gradient(135deg, #667eea20, #764ba220);
+  color: #667eea; padding: 4px 12px;
+  border-radius: 16px; font-size: 0.8rem;
+  font-weight: 500; border: 1px solid rgba(102,126,234,0.2);
+}
+
+.no-gifts {
+  color: #999; font-size: 0.85rem; margin-top: 8px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

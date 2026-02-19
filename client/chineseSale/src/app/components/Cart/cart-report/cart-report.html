@@ -1,0 +1,54 @@
+<div class="report-page">
+  <div class="page-header">
+    <h2>📊 דוח רכישות מרוכז</h2>
+  </div>
+
+  @if (reports.length === 0) {
+    <div class="empty-state">אין עדיין רכישות במערכת.</div>
+  }
+
+  @for (user of reports; track user.name) {
+  <div class="purchaser-card">
+    <div class="purchaser-header">
+      <div class="purchaser-info">
+        <h3>👤 {{ user.name }}</h3>
+        <p>📧 {{ user.email }} &nbsp;·&nbsp; 📱 {{ user.phone }}</p>
+      </div>
+      <div class="purchaser-stats">
+        <div class="stat">
+          <span class="stat-value">{{ user.totalTicketsPurchased }}</span>
+          <span class="stat-label">כרטיסים</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{{ user.grandTotalSpent }} ₪</span>
+          <span class="stat-label">סה"כ</span>
+        </div>
+      </div>
+    </div>
+
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>מתנה</th>
+          <th>כמות</th>
+          <th>מחיר ליחידה</th>
+          <th>סה"כ</th>
+          <th>תאריך</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (history of user.purchaseHistory; track history.giftName) {
+        <tr>
+          <td><strong>{{ history.giftName }}</strong></td>
+          <td>{{ history.quantity }}</td>
+          <td>{{ history.pricePerUnit }} ₪</td>
+          <td class="price-cell">{{ history.totalPrice }} ₪</td>
+          <td>{{ history.purchaseDate | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
+

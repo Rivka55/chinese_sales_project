@@ -1,0 +1,46 @@
+# ----- .NET / C# -----
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild/
+bld/
+[Bb]in/
+[Oo]bj/
+
+## NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+## Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.csproj.user
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+# ----- Node / Angular -----
+node_modules/
+dist/
+.angular/
+npm-debug.log
+yarn-error.log
+
+# ----- Logs -----
+*.log
+Logs/
+
+# ----- OS files -----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ----- IDE -----
+.vscode/

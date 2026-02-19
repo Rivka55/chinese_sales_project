@@ -1,0 +1,46 @@
+<nav class="navbar">
+  <div class="nav-brand" routerLink="/gifts" style="cursor:pointer">
+    <span class="brand-icon">🎊</span>
+    <span class="brand-text">מכירה סינית</span>
+  </div>
+  <ul class="nav-links">
+    <li><a routerLink="/gifts" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🎁 מתנות</a></li>
+
+    @if (authService.isManager()) {
+      <li><a routerLink="/donors" routerLinkActive="active">🤝 תורמים</a></li>
+      <li><a routerLink="/categories" routerLinkActive="active">📂 קטגוריות</a></li>
+      <li><a routerLink="/reports" routerLinkActive="active">📊 דוחות</a></li>
+    }
+
+    @if (authService.isLoggedIn() && !authService.isManager()) {
+      <li><a routerLink="/cart" routerLinkActive="active">🛒 סל</a></li>
+    }
+
+    @if (authService.isManager()) {
+      <li><a routerLink="/cart" routerLinkActive="active">🛒 סל</a></li>
+    }
+
+    @if (!authService.isLoggedIn()) {
+      <li><a routerLink="/login" routerLinkActive="active">🔑 כניסה</a></li>
+      <li><a routerLink="/register" routerLinkActive="active">📝 הרשמה</a></li>
+    }
+
+    @if (authService.isLoggedIn()) {
+      <li class="user-info">
+        <span class="user-badge">
+          @if (authService.isManager()) {
+            <span class="role-badge manager">מנהל</span>
+          } @else {
+            <span class="role-badge user">משתמש</span>
+          }
+        </span>
+        <span class="user-name">שלום, {{ authService.currentUserName() }}</span>
+        <button class="btn-logout" (click)="logout()">יציאה</button>
+      </li>
+    }
+  </ul>
+</nav>
+
+<main class="content">
+  <router-outlet />
+</main>

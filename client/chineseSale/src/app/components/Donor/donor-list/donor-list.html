@@ -1,0 +1,64 @@
+<div class="donor-page">
+  <div class="page-header">
+    <h2>🤝 ניהול תורמים</h2>
+    <button class="btn-add" (click)="openAdd()">➕ הוסף תורם חדש</button>
+  </div>
+
+  <div class="search-panel">
+    <h4>🔍 חיפוש תורמים</h4>
+    <div class="search-fields">
+      <input type="text" [(ngModel)]="searchName" placeholder="שם תורם..." class="search-input" />
+      <input type="text" [(ngModel)]="searchGift" placeholder="שם מתנה..." class="search-input" />
+      <input type="text" [(ngModel)]="searchEmail" placeholder="אימייל..." class="search-input" />
+      <button class="btn-search" (click)="search()">חפש</button>
+      <button class="btn-clear" (click)="clearSearch()">נקה</button>
+    </div>
+  </div>
+
+  @if (donors.length === 0) {
+    <div class="empty-state">אין תורמים להצגה</div>
+  }
+
+  <div class="donors-table-wrap">
+    <table class="donors-table">
+      <thead>
+        <tr>
+          <th>ת.ז.</th>
+          <th>שם</th>
+          <th>טלפון</th>
+          <th>אימייל</th>
+          <th>פעולות</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (d of donors; track d.id) {
+        <tr (click)="toggleDetails(d)" class="donor-row" [class.expanded]="expandedDonor?.id === d.id">
+          <td>{{d.identityNumber}}</td>
+          <td><strong>{{d.name}}</strong></td>
+          <td>{{d.phone}}</td>
+          <td>{{d.email}}</td>
+          <td class="actions-cell">
+            <button class="btn-edit" (click)="openEdit(d); $event.stopPropagation()">✏️ ערוך</button>
+            <button class="btn-delete" (click)="delete(d.id); $event.stopPropagation()">🗑️ מחק</button>
+          </td>
+        </tr>
+        @if (expandedDonor?.id === d.id) {
+        <tr class="details-row">
+          <td colspan="5">
+            <app-donor-details [donor]="expandedDonor"></app-donor-details>
+          </td>
+        </tr>
+        }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showForm) {
+  <div class="modal-overlay" (click)="showForm = false">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-donor-form [donorToEdit]="selectedDonor" (close)="refresh()"></app-donor-form>
+    </div>
+  </div>
+  }
+</div>

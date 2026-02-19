@@ -1,0 +1,152 @@
+<div class="reports-page">
+  <div class="page-header">
+    <h2>📊 לוח בקרה - דוחות</h2>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab" [class.active]="activeTab === 'revenue'" (click)="switchTab('revenue')">💰 הכנסות</button>
+    <button class="tab" [class.active]="activeTab === 'winners'" (click)="switchTab('winners')">🏆 זוכים</button>
+    <button class="tab" [class.active]="activeTab === 'topGift'" (click)="switchTab('topGift')">⭐ מתנה מובילה</button>
+    <button class="tab" [class.active]="activeTab === 'purchasers'" (click)="switchTab('purchasers')">👥 קונים</button>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">טוען נתונים...</div>
+  }
+
+  <!-- ===== REVENUE TAB ===== -->
+  @if (activeTab === 'revenue' && !loading) {
+  <div class="tab-content">
+    @if (revenueSummary) {
+    <div class="stats-grid">
+      <div class="stat-card purple">
+        <div class="stat-icon">💰</div>
+        <div class="stat-value">{{ revenueSummary.totalRevenue }} ₪</div>
+        <div class="stat-label">סה"כ הכנסות</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-icon">🎫</div>
+        <div class="stat-value">{{ revenueSummary.totalTicketsSold }}</div>
+        <div class="stat-label">כרטיסים שנמכרו</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ revenueSummary.totalParticipants }}</div>
+        <div class="stat-label">משתתפים</div>
+      </div>
+    </div>
+    } @else {
+      <div class="empty-state">אין נתוני הכנסות עדיין</div>
+    }
+  </div>
+  }
+
+  <!-- ===== WINNERS TAB ===== -->
+  @if (activeTab === 'winners' && !loading) {
+  <div class="tab-content">
+    @if (winners.length === 0) {
+      <div class="empty-state">עדיין לא הוגרלו זוכים</div>
+    }
+    <div class="winners-list">
+      @for (w of winners; track w.giftName) {
+      <div class="winner-card">
+        <div class="winner-gift">🎁 {{ w.giftName }}</div>
+        <div class="winner-info">
+          <span class="winner-name">🏆 {{ w.winnerName }}</span>
+          <span class="winner-email">📧 {{ w.contactEmail }}</span>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+
+  <!-- ===== TOP GIFT TAB ===== -->
+  @if (activeTab === 'topGift' && !loading) {
+  <div class="tab-content">
+    <div class="criteria-row">
+      <label>קריטריון:</label>
+      <select [(ngModel)]="topGiftCriteria" (ngModelChange)="loadTopGift()" class="criteria-select">
+        <option value="tickets">מספר כרטיסים</option>
+        <option value="revenue">הכנסות</option>
+      </select>
+    </div>
+
+    @if (topGift) {
+    <div class="top-gift-card">
+      <div class="top-icon">⭐</div>
+      <h3>{{ topGift.giftName }}</h3>
+      <div class="top-stats">
+        <div class="top-stat">
+          <span class="value">{{ topGift.price }} ₪</span>
+          <span class="label">מחיר כרטיס</span>
+        </div>
+        <div class="top-stat">
+          <span class="value">{{ topGift.totalTicketsPurchased }}</span>
+          <span class="label">כרטיסים שנמכרו</span>
+        </div>
+        <div class="top-stat">
+          <span class="value">{{ topGift.totalEarned }} ₪</span>
+          <span class="label">סה"כ הכנסות</span>
+        </div>
+      </div>
+    </div>
+    } @else {
+      <div class="empty-state">אין נתונים עדיין</div>
+    }
+  </div>
+  }
+
+  <!-- ===== PURCHASERS TAB ===== -->
+  @if (activeTab === 'purchasers' && !loading) {
+  <div class="tab-content">
+    @if (purchasers.length === 0) {
+      <div class="empty-state">אין רכישות במערכת</div>
+    }
+
+    @for (p of purchasers; track p.userId) {
+    <div class="purchaser-card" [class.expanded]="expandedPurchaser?.userId === p.userId">
+      <div class="purchaser-header" (click)="togglePurchaser(p)">
+        <div class="purchaser-main">
+          <strong>👤 {{ p.name }}</strong>
+          <span class="purchaser-meta">📧 {{ p.email }} · 📱 {{ p.phone }}</span>
+        </div>
+        <div class="purchaser-summary">
+          <span class="badge tickets">🎫 {{ p.totalTicketsPurchased }}</span>
+          <span class="badge money">💰 {{ p.grandTotalSpent }} ₪</span>
+          <span class="expand-icon">{{ expandedPurchaser?.userId === p.userId ? '▲' : '▼' }}</span>
+        </div>
+      </div>
+
+      @if (expandedPurchaser?.userId === p.userId && p.purchaseHistory) {
+      <div class="purchaser-details">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>מתנה</th>
+              <th>כמות</th>
+              <th>מחיר ליח'</th>
+              <th>סה"כ</th>
+              <th>תאריך</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (h of p.purchaseHistory; track h.giftName) {
+            <tr>
+              <td><strong>{{ h.giftName }}</strong></td>
+              <td>{{ h.quantity }}</td>
+              <td>{{ h.pricePerUnit }} ₪</td>
+              <td class="price-cell">{{ h.totalPrice }} ₪</td>
+              <td>{{ h.purchaseDate | date:'dd/MM/yyyy HH:mm' }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

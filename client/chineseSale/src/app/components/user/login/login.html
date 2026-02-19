@@ -1,0 +1,135 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="auth-icon">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <circle cx="28" cy="28" r="28" fill="url(#loginGrad)" />
+          <path d="M28 18c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zm0 16c-4 0-12 2-12 6v2h24v-2c0-4-8-6-12-6z" fill="#fff"/>
+          <defs>
+            <linearGradient id="loginGrad" x1="0" y1="0" x2="56" y2="56">
+              <stop offset="0%" stop-color="#ff6b6b"/>
+              <stop offset="50%" stop-color="#ffa502"/>
+              <stop offset="100%" stop-color="#ffd93d"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h2>כניסה למכירה הסינית</h2>
+      <p class="auth-subtitle">הזן את פרטי החשבון שלך</p>
+    </div>
+
+    <!-- Server Error Message -->
+    @if (errorMsg) {
+      <div class="alert alert-error">
+        <span class="alert-icon">⚠️</span>
+        <span>{{ errorMsg }}</span>
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+      <!-- Email Field -->
+      <div class="form-group" [class.has-error]="f['email'].touched && f['email'].invalid" [class.has-success]="f['email'].touched && f['email'].valid">
+        <label for="email">
+          <i class="field-icon">📧</i>
+          אימייל
+        </label>
+        <div class="input-wrapper">
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="example@email.com"
+            autocomplete="email"
+            dir="ltr"
+          />
+          @if (f['email'].touched && f['email'].valid) {
+            <span class="status-icon valid">✓</span>
+          }
+          @if (f['email'].touched && f['email'].invalid) {
+            <span class="status-icon invalid">✗</span>
+          }
+        </div>
+        @if (f['email'].touched && f['email'].errors) {
+          <div class="error-messages">
+            @if (f['email'].errors['required']) {
+              <small>⚠ חובה להזין אימייל</small>
+            }
+            @if (f['email'].errors['emailNoAt']) {
+              <small>⚠ כתובת אימייל חייבת להכיל סימן @</small>
+            }
+            @if (f['email'].errors['emailMultiAt']) {
+              <small>⚠ כתובת אימייל יכולה להכיל סימן @ אחד בלבד</small>
+            }
+            @if (f['email'].errors['emailNoLocal']) {
+              <small>⚠ חסר שם משתמש לפני ה-@</small>
+            }
+            @if (f['email'].errors['emailNoDomain']) {
+              <small>⚠ חסר דומיין (לדוגמה: gmail.com)</small>
+            }
+            @if (f['email'].errors['emailInvalid']) {
+              <small>⚠ אימייל לא תקין (לדוגמה: name&#64;domain.com)</small>
+            }
+          </div>
+        }
+        @if (f['email'].touched && f['email'].valid) {
+          <div class="success-hint">✓ אימייל תקין</div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group" [class.has-error]="f['password'].touched && f['password'].invalid" [class.has-success]="f['password'].touched && f['password'].valid">
+        <label for="password">
+          <i class="field-icon">🔒</i>
+          סיסמה
+        </label>
+        <div class="input-wrapper">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="הזן סיסמה"
+            autocomplete="current-password"
+            dir="ltr"
+          />
+          <button type="button" class="toggle-password" (click)="togglePassword()" tabindex="-1">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </button>
+        </div>
+        @if (f['password'].touched && f['password'].errors) {
+          <div class="error-messages">
+            @if (f['password'].errors['required']) {
+              <small>⚠ חובה להזין סיסמה</small>
+            }
+            @if (f['password'].errors['minlength']) {
+              <small>⚠ סיסמה חייבת להכיל לפחות 6 תווים</small>
+            }
+          </div>
+        }
+        @if (f['password'].touched && f['password'].valid) {
+          <div class="success-hint">✓ סיסמה תקינה</div>
+        }
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="isSubmitting"
+        [class.loading]="isSubmitting"
+      >
+        @if (isSubmitting) {
+          <span class="spinner"></span>
+          מתחבר...
+        } @else {
+          <span>התחבר</span>
+          <span class="btn-arrow">←</span>
+        }
+      </button>
+
+      <div class="auth-footer">
+        <span>אין לך חשבון?</span>
+        <a routerLink="/register">הירשם עכשיו</a>
+      </div>
+    </form>
+  </div>
+</div>

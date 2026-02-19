@@ -1,0 +1,138 @@
+.gift-details-card {
+  direction: rtl;
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.gift-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.6rem;
+  }
+}
+
+.gift-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.no-image {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  background: #f0f0f0;
+  border-radius: 12px;
+}
+
+.gift-category {
+  color: #888;
+  margin-top: 4px;
+}
+
+.gift-description {
+  font-size: 1.05rem;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.gift-info-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 1rem;
+
+  &.winner {
+    color: #e67e22;
+    font-weight: 600;
+  }
+}
+
+.add-to-cart-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 1.1rem;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.qty-display {
+  font-weight: 600;
+  font-size: 1.1rem;
+  min-width: 20px;
+  text-align: center;
+}
+
+.btn-add-cart {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: 0.2s;
+
+  &:hover {
+    background: #218838;
+    transform: scale(1.03);
+  }
+
+  &.btn-login-first {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    &:hover { box-shadow: 0 3px 10px rgba(102,126,234,0.4); background: linear-gradient(135deg, #5468d4, #6a3f96); }
+  }
+}
+
+.cart-message {
+  margin-top: 10px;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #667eea;
+  font-weight: 500;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}

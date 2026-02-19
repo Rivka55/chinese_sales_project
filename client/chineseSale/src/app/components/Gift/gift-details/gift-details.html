@@ -1,0 +1,60 @@
+@if (gift) {
+<div class="gift-details-card">
+  <div class="gift-header">
+    @if (gift.picture) {
+      <img [src]="'images/' + gift.picture" [alt]="gift.name" class="gift-image" />
+    } @else {
+      <div class="no-image">🎁</div>
+    }
+    <div class="gift-title-section">
+      <h2>{{ gift.name }}</h2>
+      <p class="gift-category">קטגוריה: {{ gift.categoryName }}</p>
+    </div>
+  </div>
+
+  <div class="gift-body">
+    <p class="gift-description">{{ gift.description }}</p>
+
+    <div class="gift-info-row">
+      <span>💰 מחיר כרטיס:</span>
+      <strong>{{ gift.price }} ₪</strong>
+    </div>
+
+    <div class="gift-info-row">
+      <span>🤝 תורם:</span>
+      <strong>{{ gift.donorName }}</strong>
+    </div>
+
+    @if (gift.winnerName) {
+      <div class="gift-info-row winner">
+        <span>🏆 זוכה:</span>
+        <strong>{{ gift.winnerName }}</strong>
+      </div>
+    }
+
+    @if (!gift.winnerName) {
+      @if (authService.isLoggedIn()) {
+        <div class="add-to-cart-section">
+          <div class="qty-controls">
+            <button (click)="changeQty(-1)" [disabled]="quantity <= 1">-</button>
+            <span class="qty-display">{{ quantity }}</span>
+            <button (click)="changeQty(1)" [disabled]="quantity >= 100">+</button>
+          </div>
+          <button class="btn-add-cart" (click)="addToCart()">🛒 הוסף לסל</button>
+        </div>
+        @if (message) {
+          <p class="cart-message">{{ message }}</p>
+        }
+      } @else {
+        <div class="add-to-cart-section">
+          <button class="btn-add-cart btn-login-first" (click)="goToLogin()">🔑 התחבר כדי לקנות</button>
+        </div>
+      }
+    }
+  </div>
+
+  <a routerLink="/gifts" class="back-link">← חזרה לרשימת המתנות</a>
+</div>
+} @else {
+  <div class="loading">טוען פרטי מתנה...</div>
+}

@@ -1,0 +1,51 @@
+<div class="category-page">
+  <div class="page-header">
+    <h2>📂 ניהול קטגוריות</h2>
+    <button class="btn-add" (click)="openAdd()">➕ הוסף קטגוריה</button>
+  </div>
+
+  @if (categories.length === 0) {
+    <div class="empty-state">אין קטגוריות להצגה</div>
+  }
+
+  <div class="categories-grid">
+    @for (cat of categories; track cat.id) {
+    <div class="category-card">
+      <div class="category-icon">📂</div>
+      <div class="category-name">{{ cat.name }}</div>
+      <div class="category-actions">
+        <button class="btn-edit" (click)="openEdit(cat)">✏️</button>
+        <button class="btn-delete" (click)="deleteCategory(cat.id)">🗑️</button>
+      </div>
+    </div>
+    }
+  </div>
+
+  @if (showForm) {
+  <div class="modal-overlay" (click)="cancelForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3 class="form-title">{{ editingCategory ? '✏️ עריכת קטגוריה' : '➕ הוספת קטגוריה' }}</h3>
+
+      <div class="form-group">
+        <label>שם קטגוריה</label>
+        <input
+          type="text"
+          [(ngModel)]="newCategoryName"
+          placeholder="הזן שם קטגוריה..."
+          class="form-input"
+          (keyup.enter)="save()"
+        />
+      </div>
+
+      @if (errorMsg) {
+        <div class="error-msg">⚠️ {{ errorMsg }}</div>
+      }
+
+      <div class="btn-row">
+        <button class="btn-save" (click)="save()" [disabled]="!newCategoryName.trim()">💾 שמור</button>
+        <button class="btn-cancel" (click)="cancelForm()">ביטול</button>
+      </div>
+    </div>
+  </div>
+  }
+</div>

@@ -1,0 +1,98 @@
+<div class="gift-edit-card">
+    <h3 class="form-title">{{ id > 0 ? '✏️ עריכת מתנה' : '➕ הוספת מתנה' }}</h3>
+    <div class="gift-form" [formGroup]="frmGift">
+
+        @if (id > 0) {
+        <div class="form-group">
+            <label>🔢 מספר מתנה (ID)</label>
+            <input type="number" class="form-control" [value]="id" disabled />
+        </div>
+        }
+
+        <div class="form-group">
+            <label>🎁 שם מתנה</label>
+            <input type="text" class="form-control" formControlName="name" placeholder="שם המתנה"
+                [class.border-danger]="frmGift.controls['name'].invalid && frmGift.controls['name'].touched" />
+
+            @if (frmGift.controls['name'].touched && frmGift.controls['name'].errors?.['required']) {
+            <div class="text-danger">שדה חובה</div>
+            }
+            @if (frmGift.controls['name'].errors?.['maxlength']) {
+            <div class="text-danger">שם מתנה לא יכול להיות ארוך יותר מ-50 תווים</div>
+            }
+            @if (frmGift.controls['name'].errors?.['existName']) {
+            <div class="text-danger">{{ frmGift.controls['name'].errors?.['existName'] }}</div>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>📝 תיאור</label>
+            <input type="text" class="form-control" formControlName="description" placeholder="תיאור המתנה"
+                [class.border-danger]="frmGift.controls['description'].invalid && frmGift.controls['description'].touched" />
+
+            @if (frmGift.controls['description'].touched && frmGift.controls['description'].errors?.['required']) {
+            <div class="text-danger">שדה חובה</div>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>🖼️ תמונה (URL)</label>
+            <input type="text" class="form-control" formControlName="picture" placeholder="שם קובץ התמונה" dir="ltr"
+                [class.border-danger]="frmGift.controls['picture'].invalid && frmGift.controls['picture'].touched" />
+
+            @if (frmGift.controls['picture'].touched && frmGift.controls['picture'].errors?.['required']) {
+            <div class="text-danger">שדה חובה</div>
+            }
+
+            @if (frmGift.get('picture')?.value) {
+            <div class="preview-container">
+                <p>תצוגה מקדימה:</p>
+                <img [src]="'images/' + frmGift.get('picture')?.value" 
+                     class="gift-img-preview" 
+                     (error)="handleImageError($event)"
+                     style="max-width: 200px; border-radius: 8px; border: 1px solid #ddd;" />
+            </div>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>💰 מחיר כרטיס בודד</label>
+            <input type="number" class="form-control" formControlName="price" dir="ltr"
+                [class.border-danger]="frmGift.controls['price'].invalid && frmGift.controls['price'].touched" />
+
+            @if (frmGift.controls['price'].errors?.['min']) {
+            <div class="text-danger">מחיר מינימום 5 ש"ח</div>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>🤝 תורם</label>
+            <select class="form-control" formControlName="donor"
+                [class.border-danger]="frmGift.controls['donor'].invalid && frmGift.controls['donor'].touched">
+                <option [ngValue]="null" disabled>בחר תורם</option>
+                @for (d of donors; track d.id) {
+                <option [ngValue]="d">{{ d.name }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>📂 קטגוריה</label>
+            <select class="form-control" formControlName="category"
+                [class.border-danger]="frmGift.controls['category'].invalid && frmGift.controls['category'].touched">
+                <option [ngValue]="null" disabled>בחר קטגוריה</option>
+                @for (c of categories; track c.id) {
+                <option [ngValue]="c">{{ c.name }}</option>
+                }
+            </select>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-save" (click)="saveGift()" [disabled]="frmGift.invalid">💾 שמור</button>
+            <button class="btn-cancel" (click)="cancelChanges()">ביטול</button>
+            @if (id > 0) {
+            <button class="btn-delete" (click)="deleteGift(id)">🗑️ מחיקה</button>
+            }
+        </div>
+    </div>
+</div>
