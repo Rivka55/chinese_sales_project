@@ -1,0 +1,43 @@
+services:
+  # שירות בסיס הנתונים
+  db:
+    container_name: mssql_db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrongPassword123!
+    ports:
+      - "1433:1433"
+
+  # שירות Redis
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # שירות ה-API
+  api:
+    container_name: dotnet_api
+    build:
+      context: ./server/project1
+    depends_on:
+      - db
+      - redis
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db;Database=Project;User=sa;Password=YourStrongPassword123!;TrustServerCertificate=True
+      - Redis__ConnectionString=redis:6379
+    ports:
+      - "5000:8080"
+
+  # שירות ה-Angular (הפרונטנד)
+  frontend:
+    container_name: angular_client
+    build:
+      context: ./client/chineseSale
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
